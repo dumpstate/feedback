@@ -21,4 +21,5 @@ trait FeedbackComponent
 
   override val config = Configuration(globalConfig)
   override val feedbackService = new FeedbackServiceImpl()
+  override val appsService = new AppsServiceImpl()
 }

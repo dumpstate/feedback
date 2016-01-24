@@ -23,5 +23,6 @@ libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.1.3",
   "com.typesafe.akka" %% "akka-actor" % "2.4.1",
   "com.typesafe.akka" %% "akka-http-experimental" % "2.0.2",
-  "com.typesafe.akka" %% "akka-http-spray-json-experimental" % "2.0.2"
+  "com.typesafe.akka" %% "akka-http-spray-json-experimental" % "2.0.2",
+  "org.scalaz" %% "scalaz-core" % "7.2.0"
 )
