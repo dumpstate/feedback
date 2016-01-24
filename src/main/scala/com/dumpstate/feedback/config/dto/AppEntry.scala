@@ -1,7 +1,7 @@
-package com.dumpstate.feedback.config
+package com.dumpstate.feedback.config.dto
 
 import com.dumpstate.feedback.dto.ApplicationId
-import com.typesafe.config.{Config, ConfigObject}
+import com.typesafe.config.Config
 
 case class AppEntry(id: ApplicationId) {
 

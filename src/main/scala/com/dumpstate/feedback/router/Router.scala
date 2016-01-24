@@ -1,10 +1,10 @@
-package com.dumpstate.feedback.route
+package com.dumpstate.feedback.router
 
 import akka.http.scaladsl.server.Directives._
 
 import com.dumpstate.feedback.dto.input.FeedbackInput
 
-trait FeedbackRoute {
+class Router {
   val route =
     path("publish") {
       post {
