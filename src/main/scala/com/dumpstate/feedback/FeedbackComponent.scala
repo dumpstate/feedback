@@ -6,10 +6,13 @@ import com.typesafe.config.ConfigFactory
 
 import com.dumpstate.feedback.config.{Configuration, ConfigurationComponent}
 import com.dumpstate.feedback.router.{Router, RouterComponent}
+import com.dumpstate.feedback.util.LoggerComponent
 
 trait FeedbackComponent
   extends ConfigurationComponent
-  with RouterComponent {
+  with RouterComponent
+  with LoggerComponent {
+
   implicit val system = ActorSystem("feedback-system")
   implicit val materializer = ActorMaterializer()
   implicit val ec = system.dispatcher

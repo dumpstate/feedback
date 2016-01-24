@@ -1,8 +1,7 @@
 package com.dumpstate.feedback.util
 
-/**
-  * Created by albert on 1/24/16.
-  */
-class LoggerComponent {
+import org.slf4j.LoggerFactory
 
+trait LoggerComponent {
+  val logger = LoggerFactory.getLogger("feedback")
 }
