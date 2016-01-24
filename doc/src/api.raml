@@ -1,0 +1,30 @@
+#%RAML 0.8
+---
+title: feedback-service
+
+schemas:
+  - Feedback: !include schema/feedback.schema.json
+
+/publish:
+  post:
+    description: Publish the feedback
+    headers:
+      Authorization:
+        description: Google reCaptcha request token
+        type: string
+        required: true
+        example: i6tbi76btyugjhjn76ytgh
+    body:
+      application/json:
+        schema: Feedback
+        example: !include example/feedback.json
+    responses:
+      204:
+        description: feedback has been successfully published
+      401:
+        description: wrong access token
+      404:
+        description: cannot find application of given id
+      503:
+        description: 3rd party service in unavailable
+

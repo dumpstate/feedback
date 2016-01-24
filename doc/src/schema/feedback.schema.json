@@ -1,0 +1,18 @@
+{
+    "type": "object",
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "id": "http://jsonschema.net",
+    "properties":{
+      "appId": {
+        "type": "string",
+        "required": true,
+        "description": "Application ID"
+      },
+      "content": {
+        "type": "object",
+        "required": true,
+        "description": "JSON object - content of the message"
+      }
+    }
+}
+

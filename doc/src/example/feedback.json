@@ -1,0 +1,7 @@
+{
+  "appId": "application-id",
+  "content": {
+    "from": "email-address",
+    "message": "Yellow!"
+  }
+}
