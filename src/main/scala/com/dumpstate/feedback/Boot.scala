@@ -1,19 +1,15 @@
 package com.dumpstate.feedback
 
-import scala.concurrent.duration._
+import akka.actor.ActorSystem
+import akka.http.scaladsl.Http
+import akka.stream.ActorMaterializer
 
-import akka.actor.{ActorSystem, Props}
-import akka.io.IO
-import akka.pattern.ask
-import akka.util.Timeout
-import spray.can.Http
+import com.dumpstate.feedback.route.FeedbackRoute
 
-object Boot extends App {
+object Boot extends App with FeedbackRoute {
   implicit val system = ActorSystem("feedback-system")
+  implicit val materializer = ActorMaterializer()
+  implicit val ec = system.dispatcher
 
-  val service = system.actorOf(Props[FeedbackActor], "feedback")
-
-  implicit val timeout = Timeout(5.seconds)
-
-  IO(Http) ? Http.Bind(service, interface = "0.0.0.0", port = 8080)
+  Http().bindAndHandle(route, "0.0.0.0", 8080)
 }

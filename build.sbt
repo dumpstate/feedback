@@ -19,13 +19,8 @@ scalacOptions ++= Seq(
 
 licenses +=("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0.html"))
 
-
-libraryDependencies ++= {
-  val akkaVersion = "2.4.1"
-  val sprayVersion = "1.3.3"
-  Seq(
-    "io.spray" %% "spray-can" % sprayVersion,
-    "io.spray" %% "spray-routing" % sprayVersion,
-    "com.typesafe.akka" %% "akka-actor" % akkaVersion
-  )
-}
+libraryDependencies ++= Seq(
+  "com.typesafe.akka" %% "akka-actor" % "2.4.1",
+  "com.typesafe.akka" %% "akka-http-experimental" % "2.0.2",
+  "com.typesafe.akka" %% "akka-http-spray-json-experimental" % "2.0.2"
+)
