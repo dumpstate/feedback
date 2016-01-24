@@ -1,0 +1,5 @@
+package com.dumpstate.feedback.service
+
+sealed trait FeedbackServiceError
+case object UnknownApplicationId extends FeedbackServiceError
+case object ThirdPartyServiceNotAvailable extends FeedbackServiceError
