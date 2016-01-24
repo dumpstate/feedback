@@ -8,6 +8,6 @@ case class AppEntry(id: ApplicationId) {
 }
 
 object AppEntry {
-  def apply(co: Config): AppEntry =
-    AppEntry(ApplicationId(co.getString("id")))
+  def apply(conf: Config): AppEntry =
+    AppEntry(ApplicationId(conf.getString("id")))
 }
