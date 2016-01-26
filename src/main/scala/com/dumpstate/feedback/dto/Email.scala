@@ -1,5 +1,7 @@
 package com.dumpstate.feedback.dto
 
+import scalaz._, Scalaz._
+
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import spray.json._
 
@@ -19,4 +21,6 @@ object Email extends SprayJsonSupport with DefaultJsonProtocol {
         case _ => throw new DeserializationException("ApplicationId expected")
       }
   }
+
+  implicit val equal = Equal.equalA[Email]
 }

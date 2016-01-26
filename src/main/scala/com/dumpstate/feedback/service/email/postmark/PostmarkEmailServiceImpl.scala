@@ -10,8 +10,8 @@ import akka.stream.Materializer
 import org.slf4j.Logger
 import spray.json._
 
-import com.dumpstate.feedback.config.dto.AppEntry.MailerConfig
-import com.dumpstate.feedback.dto.input.FeedbackInput
+import com.dumpstate.feedback.config.dto.AppEntry.PostmarkConfig
+import com.dumpstate.feedback.dto.Email
 import com.dumpstate.feedback.service.email.EmailService
 
 class PostmarkEmailServiceImpl(logger: Logger)(
@@ -27,13 +27,13 @@ class PostmarkEmailServiceImpl(logger: Logger)(
         Accept(MediaTypes.`application/json`),
         PostmarkServerTokenHeader(token)))
 
-  override def send(subject: String, feedback: FeedbackInput)(config: MailerConfig) =
+  override def send(to: Email, subject: String, content: JsObject)(config: PostmarkConfig) =
     http.singleRequest(
       sendMailRequest(config.token)
         .withEntity(
           ContentTypes.`application/json`,
-          PostmarkEnvelope(config.sender, config.recipient,
-            subject, feedback.toJson.prettyPrint).toJson.compactPrint))
+          PostmarkEnvelope(config.sender, to,
+            subject, content.prettyPrint).toJson.compactPrint))
       .map {
         case HttpResponse(StatusCodes.OK, _, _, _) => Some(())
         case response =>

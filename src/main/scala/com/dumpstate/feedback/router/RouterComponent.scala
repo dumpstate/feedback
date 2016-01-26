@@ -18,6 +18,8 @@ trait RouterComponent extends Router
     err match {
       case UnknownApplicationId =>
         complete(NotFound)
+      case UnknownTopic =>
+        complete(UnprocessableEntity)
       case ThirdPartyServiceNotAvailable =>
         complete(ServiceUnavailable)
     }
