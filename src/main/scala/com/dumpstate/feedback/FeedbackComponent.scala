@@ -5,7 +5,8 @@ import akka.stream.ActorMaterializer
 import com.typesafe.config.ConfigFactory
 
 import com.dumpstate.feedback.config.{Configuration, ConfigurationComponent}
-import com.dumpstate.feedback.router.{Router, RouterComponent}
+import com.dumpstate.feedback.router.RouterComponent
+import com.dumpstate.feedback.service.email.postmark.PostmarkEmailServiceImpl
 import com.dumpstate.feedback.util.LoggerComponent
 
 trait FeedbackComponent
@@ -22,4 +23,5 @@ trait FeedbackComponent
   override val config = Configuration(globalConfig)
   override val feedbackService = new FeedbackServiceImpl()
   override val appsService = new AppsServiceImpl()
+  override val emailService = new PostmarkEmailServiceImpl(logger)
 }
