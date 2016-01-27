@@ -2,6 +2,7 @@ package com.dumpstate.feedback
 
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
+import com.dumpstate.feedback.service.auth.RecaptchaAuthServiceImpl
 import com.typesafe.config.ConfigFactory
 
 import com.dumpstate.feedback.config.{Configuration, ConfigurationComponent}
@@ -24,4 +25,5 @@ trait FeedbackComponent
   override val feedbackService = new FeedbackServiceImpl()
   override val appsService = new AppsServiceImpl()
   override val emailService = new PostmarkEmailServiceImpl(logger)
+  override val authService = new RecaptchaAuthServiceImpl(logger)
 }

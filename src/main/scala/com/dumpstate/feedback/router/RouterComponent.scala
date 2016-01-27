@@ -1,18 +1,23 @@
 package com.dumpstate.feedback.router
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.util.{Failure, Success}
+import scala.concurrent.Future.successful
+import scala.util.{Failure => TFailure, Success => TSuccess}
+
+import scalaz._, Scalaz._
 
 import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.server.Directives._
 
 import com.dumpstate.feedback.dto.input.FeedbackInput
 import com.dumpstate.feedback.service._
+import com.dumpstate.feedback.service.auth.AuthServiceComponent
 import com.dumpstate.feedback.util.LoggerComponent
 
 trait RouterComponent extends Router
   with FeedbackServiceComponent
-  with LoggerComponent {
+  with LoggerComponent
+  with AuthServiceComponent {
 
   private def publishError(err: FeedbackServiceError) =
     err match {
@@ -33,18 +38,24 @@ trait RouterComponent extends Router
           complete(NoContent)
       }
 
+  def authenticateAndPublish(token: String, in: FeedbackInput) =
+    authService
+      .authenticate(token)
+      .flatMap(_.option(publish(in))
+        .getOrElse(successful(complete(Unauthorized))))
+
   override val route =
     path("publish") {
       post {
         decodeRequest {
-          entity(as[FeedbackInput]) { in =>
-            onComplete(publish(in)) {
-              case Success(res) => res
-              case Failure(ex) =>
-                logger.error(s"Error occured: ${ex.getMessage}")
-                complete(InternalServerError)
-            }
-          }
+          extractCredentials(
+            _.map(creds => entity(as[FeedbackInput])(in =>
+              onComplete(authenticateAndPublish(creds.scheme, in)) {
+                case TSuccess(res) => res
+                case TFailure(ex) =>
+                  complete(InternalServerError)
+              }))
+             .getOrElse(complete(Unauthorized)))
         }
       }
     }
