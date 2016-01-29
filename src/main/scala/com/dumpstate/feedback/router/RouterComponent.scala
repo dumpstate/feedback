@@ -39,10 +39,13 @@ trait RouterComponent extends Router
       }
 
   def authenticateAndPublish(token: String, in: FeedbackInput) =
-    authService
-      .authenticate(token)
-      .flatMap(_.option(publish(in))
-        .getOrElse(successful(complete(Unauthorized))))
+    appsService.secret(in.appId)
+      .map { secret =>
+        authService
+          .authenticate(token, secret)
+            .flatMap(_.option(publish(in))
+            .getOrElse(successful(complete(Unauthorized))))
+      }.getOrElse(successful(complete(NotFound)))
 
   override val route =
     path("publish") {

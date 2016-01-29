@@ -2,7 +2,7 @@ package com.dumpstate.feedback
 
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
-import com.dumpstate.feedback.service.auth.RecaptchaAuthServiceImpl
+import com.dumpstate.feedback.service.auth.recaptcha.RecaptchaAuthServiceImpl
 import com.typesafe.config.ConfigFactory
 
 import com.dumpstate.feedback.config.{Configuration, ConfigurationComponent}

@@ -7,14 +7,16 @@ import scalaz._, Scalaz._
 import com.typesafe.config.Config
 
 import com.dumpstate.feedback.config.dto.AppEntry.{TopicConfig, PostmarkConfig}
-import com.dumpstate.feedback.dto.{Topic, Email, ApplicationId}
+import com.dumpstate.feedback.dto.{Secret, Topic, Email, ApplicationId}
 
 case class AppEntry(
   id: ApplicationId,
+  recaptchaSecret: Secret,
   postmarkConfig: PostmarkConfig,
   topics: List[TopicConfig]) {
 
   require(id != null, "id cannot be null")
+  require(recaptchaSecret != null, "recaptchaSecret cannot be null")
   require(postmarkConfig != null, "mailerConfig cannot be null")
   require(topics != null, "topics cannot be null")
 
@@ -53,6 +55,7 @@ object AppEntry {
   def apply(conf: Config): AppEntry =
     AppEntry(
       ApplicationId(conf.getString("id")),
+      Secret(conf.getString("recaptcha-secret")),
       PostmarkConfig(conf.getObject("postmark").toConfig),
       conf.getObjectList("topics").toList
         .map(co => TopicConfig(co.toConfig)))

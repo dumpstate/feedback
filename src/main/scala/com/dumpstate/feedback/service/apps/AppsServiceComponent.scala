@@ -11,5 +11,10 @@ trait AppsServiceComponent extends ConfigurationComponent {
   class AppsServiceImpl extends AppsService {
     override def get(appId: ApplicationId) =
       config.apps.find(_.id === appId)
+
+    override def secret(appId: ApplicationId) =
+      config.apps
+        .find(_.id === appId)
+        .map(_.recaptchaSecret)
   }
 }
