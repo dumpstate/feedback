@@ -19,6 +19,8 @@ scalacOptions ++= Seq(
 
 licenses +=("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0.html"))
 
+enablePlugins(JavaAppPackaging)
+
 libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.1.3",
   "com.typesafe.akka" %% "akka-actor" % "2.4.1",
