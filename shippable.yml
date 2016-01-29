@@ -1,0 +1,10 @@
+language: scala
+
+scala:
+  - 2.11.7
+
+script:
+  - sbt clean compile test
+
+after_script:
+  - sbt universal:packageXzTarball
