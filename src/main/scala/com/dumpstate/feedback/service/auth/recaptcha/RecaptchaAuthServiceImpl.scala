@@ -26,7 +26,7 @@ class RecaptchaAuthServiceImpl(logger: Logger)(
     http.singleRequest(
       HttpRequest(
         method = HttpMethods.POST,
-        uri = "https://www.google.com/recaptcha/api/sireverify")
+        uri = "https://www.google.com/recaptcha/api/siteverify")
         .withEntity(
           ContentTypes.`application/json`,
           RecaptchaEnvelope(secret, token).toJson.compactPrint))
