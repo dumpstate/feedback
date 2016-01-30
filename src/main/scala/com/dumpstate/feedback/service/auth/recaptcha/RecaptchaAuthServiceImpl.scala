@@ -1,15 +1,14 @@
 package com.dumpstate.feedback.service.auth.recaptcha
 
-import akka.util.ByteString
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.Future.successful
-import scala.util.control.Exception.catching
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
+import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.model._
+import akka.http.scaladsl.unmarshalling.Unmarshal
 import akka.stream.Materializer
 import org.slf4j.Logger
 import spray.json._
@@ -18,7 +17,7 @@ import com.dumpstate.feedback.dto.Secret
 import com.dumpstate.feedback.service.auth.AuthService
 
 class RecaptchaAuthServiceImpl(logger: Logger)(
-  implicit system: ActorSystem, fm: Materializer) extends AuthService {
+  implicit system: ActorSystem, fm: Materializer) extends AuthService with SprayJsonSupport {
 
   val http = Http(system)
 
@@ -32,12 +31,13 @@ class RecaptchaAuthServiceImpl(logger: Logger)(
           RecaptchaEnvelope(secret, token).toJson.compactPrint))
       .flatMap {
         case HttpResponse(StatusCodes.OK, _, res, _) =>
-          logger.debug(s"Response from reCaptcha: $res")
-          catching(classOf[DeserializationException]).opt(
-            res.dataBytes.runFold(ByteString(""))(_ ++ _)
-              .map(_.utf8String.parseJson
-                .convertTo[RecaptchaResponse].success))
-            .getOrElse(successful(false))
+          Unmarshal(res).to[RecaptchaResponse]
+            .map(_.success)
+            .recoverWith {
+              case err =>
+                logger.warn(s"Failed to parse response from reCaptcha: $res", err)
+                successful(false)
+            }
         case response =>
           logger.warn(s"Unauthorized: $response")
           successful(false)
