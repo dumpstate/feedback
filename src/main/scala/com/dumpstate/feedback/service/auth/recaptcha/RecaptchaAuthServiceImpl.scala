@@ -32,6 +32,7 @@ class RecaptchaAuthServiceImpl(logger: Logger)(
           RecaptchaEnvelope(secret, token).toJson.compactPrint))
       .flatMap {
         case HttpResponse(StatusCodes.OK, _, res, _) =>
+          logger.debug(s"Response from reCaptcha: $res")
           catching(classOf[DeserializationException]).opt(
             res.dataBytes.runFold(ByteString(""))(_ ++ _)
               .map(_.utf8String.parseJson
