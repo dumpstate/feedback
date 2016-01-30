@@ -6,8 +6,13 @@ scala:
 jdk:
   - oraclejdk8
 
+env:
+  global:
+    - secure: h0bBCPPFoSxRFwbcCvcsZddRz/LFkDBAh25JnNPE4kVyFjGp74rW6b+KqLbga9/+R3V7bvoeV83tGvS4wZkX2w67Nfmp0U6yaaSsZnvdK+bSpRed9ipInEK1eoAaPD+6f85l7YKggWrJvt0fTxVE0GWPxPYmboN4JJ97C2CZBKTb0zZEGNUW26iliMziqaL5IjluEZkKl45g1VjgEljJ+4H6ZQYmE80eRrOU9lncxaiVGfAk3S+T1j7lsSeSv5rI0LoGG8vdzWnEuh8KTPDdHnR84jSmci6v9Cvh03p9B7ikInNxxKP0SfujIpqOHfdFlUlecDBf7vhlpJ57381eTg==
+
 script:
   - sbt clean compile test
 
 after_script:
   - sbt universal:packageXzTarball
+  - if [ "$BRANCH" == "develop" ]; then scp ./target/universal/*.txz deployment@$DUMPSTATE_STATIC:/home/deployment/; fi
