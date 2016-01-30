@@ -52,12 +52,14 @@ trait RouterComponent extends Router
       post {
         decodeRequest {
           extractCredentials(
-            _.map(creds => entity(as[FeedbackInput])(in =>
+            _.map(creds => entity(as[FeedbackInput]) { in =>
+              logger.debug(s"Credentials extracted, will procede with input: $in")
               onComplete(authenticateAndPublish(creds.scheme, in)) {
                 case TSuccess(res) => res
                 case TFailure(ex) =>
+                  logger.error("Failed to authenticate and publish", ex)
                   complete(InternalServerError)
-              }))
+              }})
              .getOrElse(complete(Unauthorized)))
         }
       }
